@@ -1,0 +1,53 @@
+{% extends "blog/base.html" %}
+
+{% block title_block %}
+{{post.title}}
+{% endblock title_block %}
+
+{% block body_block %}
+<div class="pulldown">
+    <a href="#">
+        <h1 class="loader posttitle">{{post.title}}</h1>
+    </a>
+    {% if post.publish_date %}
+    <div class="date postdate">
+        {{post.publish_date}}
+    </div>
+    {% else %}
+    <a class="btn btn-primary" href="{% url 'blog:publish_post' pk=post.pk %}">Publish</a>
+    {% endif %}
+    <p class="postcontent"> {{post.text|safe|linebreaksbr}} </p>
+    {% if user.is_authenticated %}
+    <a class="btn btn-primary" title="Edit post" href="{% url 'blog:post_edit' pk=post.pk %}">
+        <img width="25px" height="25px" src="https://img.icons8.com/cotton/64/000000/pen.png" /></a>
+    <a class="btn btn-danger" title="Delete post" href="{% url 'blog:post_remove' pk=post.pk %}">
+        <img width="25px" height="25px" src="https://img.icons8.com/fluent/48/000000/filled-trash.png" /></a>
+    {% endif %}
+    <hr>
+    <a class="btn-comment btn btn-success" title="Add comment" href="{% url 'blog:add_comment' pk=post.pk %}">
+        <img width="25px" height="25px" src="https://img.icons8.com/fluent/48/000000/topic.png" />
+    </a>
+
+
+    <div class="container ">
+        <h1>Comment section: </h1>
+        {% for comment in post.comments.all %}
+        <br>
+        {{comment.create_date}}
+        {% if user.is_authenticated or comment.approved_comment %}
+        {% if not comment.approved_comment %}
+        <a class="btn btn-success" title="Remove comment" href="{% url 'blog:remove_comment' pk=comment.pk %}">
+            <img width="25px" height="25px" src="https://img.icons8.com/fluent/48/000000/filled-trash.png" /></a>
+        <a class="btn btn-danger" title="Approve Comment" href="{% url 'blog:approve_comment' pk=comment.pk %}">
+            <img width="25px" height="25px" src="https://img.icons8.com/cute-clipart/64/000000/ok.png" /></a>
+        {% endif %}
+        {% endif %}
+        <p>{{comment.text|safe|linebreaks}}</p>
+        <p>Posted by: <strong>{{comment.author}}</strong></p>
+        {% empty %}
+        <p>No Comments!</p>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock body_block %}

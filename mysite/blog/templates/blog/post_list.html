@@ -1,0 +1,30 @@
+{% extends "blog/base.html" %}
+
+{% block title_block %}
+Welcome to Blogger
+{% endblock title_block %}
+
+{% block body_block %}
+<div class="centerstage pulldown">
+    {% for post in posts %}
+    <div class="post container">
+        {% if post.publish_date %}
+        <h1><a href="{% url 'blog:post_detail' pk=post.pk %}">{{post.title}}</a></h1>
+        <p>By <strong>{{post.author}}</strong></p>
+        <p>{{post.text|safe|truncatechars:50}}</p>
+        <div class="date">
+            <p>Published on: {{post.publish_date|date:'d M Y'}}</p>
+        </div>
+        <div class="comment"><a title="comments" href="{% url 'blog:add_comment' pk=post.pk %}">
+                <img width="20px" height="20px"
+                    src="https://img.icons8.com/fluent/48/000000/topic.png" />({{post.approve_comment.count}})</a></div>
+    </div>
+    <hr>
+    {% endif %}
+
+</div>
+{% empty %}
+<p>Your blogs are yet to post. Stay tuned :)</p>
+{% endfor %}
+</div>
+{% endblock body_block %}

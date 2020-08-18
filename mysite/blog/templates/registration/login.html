@@ -1,0 +1,21 @@
+{% extends "blog/base.html" %}
+
+{% block title_block %}
+Login to create post
+{% endblock title_block %}
+
+{% block body_block %}
+<div class="pulldown">
+    <h2>Please Login:</h2>
+    <h4>(Must be Superuser, please check with the site administrator)</h4>
+    {% if form.error %}
+    <p>Invalid login details, Please check out the details or try again in little bit</p>
+    {% endif %}
+    <form action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" value="Login" class="btn btn-primary">
+        <input type="hidden" name="next" value="{{next}}">
+    </form>
+</div>
+{% endblock body_block %}

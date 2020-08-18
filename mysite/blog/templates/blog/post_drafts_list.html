@@ -1,0 +1,24 @@
+{% extends "blog/base.html" %}
+
+{% block title_block %}
+Draft Post
+{% endblock title_block %}
+
+{% block body_block %}
+<div class="pulldown">
+    <h1>Drafts: </h1>
+    {% for post in posts %}
+
+    {% if not post.publish_date %}
+    <div class="post">
+        <p class="date">Created on: {{post.create_date|date:'d-m-Y'}}</p>
+        <h1><a href="{% url 'blog:post_detail' pk=post.pk %}">{{post.title}}</a></h1>
+        <p>{{post.text|truncatechars:150|safe|linebreaks}}</p>
+    </div>
+    {% endif %}
+
+    {% empty %}
+    <p>No Drafts!</p>
+    {% endfor %}
+</div>
+{% endblock body_block %}
